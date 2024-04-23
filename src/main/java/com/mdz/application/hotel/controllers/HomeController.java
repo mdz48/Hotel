@@ -25,6 +25,14 @@ public class HomeController {
     private Button cancelReservationButton;
 
     @FXML
+    private Button updateReserrvacionBtn;
+
+    @FXML
+    void onClickUpdateBtn(MouseEvent event) {
+        App.newStage("actualizar-view", "Actualizar Reservación");
+    }
+
+    @FXML
     void onClickCancelButton(MouseEvent event) {
         App.newStage("cancelar-view", "cancelar");
     }

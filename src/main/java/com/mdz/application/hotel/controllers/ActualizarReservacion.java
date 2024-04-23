@@ -1,37 +1,38 @@
 package com.mdz.application.hotel.controllers;
 
 import com.mdz.application.hotel.App;
+import com.mdz.application.hotel.models.Reservacion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 
-public class ReservarController {
+public class ActualizarReservacion {
 
     @FXML
     private DatePicker datePicker;
 
     @FXML
-    private ComboBox<Integer> peopleComboBox;
-
-    @FXML
-    private ComboBox<String> tipoComboBox;
+    private Button exitButton;
 
     @FXML
     private ComboBox<Integer> habitacionComboBox;
 
     @FXML
+    private TextField idTxt;
+
+    @FXML
+    private ComboBox<Integer> peopleComboBox;
+
+    @FXML
     private Button saveButton;
 
     @FXML
-    private Button exitButton;
+    private ComboBox<String> tipoComboBox;
 
     @FXML
     void onClickExitButton(MouseEvent event) {
@@ -40,44 +41,46 @@ public class ReservarController {
 
     @FXML
     void onClickSaveButton(MouseEvent event) {
-        String valor = tipoComboBox.getValue();
-        if (valor.equals("Individual")){
-            if(App.getHotel().reservarIndividual(habitacionComboBox.getValue(), datePicker.getValue(), peopleComboBox.getValue())){
-                String contenido = "Se reservó";
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText(contenido);
-                alert.showAndWait();
-            } else {
-                String contenido = "Ya esta ocupado";
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText(contenido);
-                alert.showAndWait();
-            }
-        } else if (valor.equals("Doble")) {
-            if(App.getHotel().resevarDoble(habitacionComboBox.getValue(), datePicker.getValue(), peopleComboBox.getValue())){
-                String contenido = "Se reservó";
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText(contenido);
-                alert.showAndWait();
-            } else {
-                String contenido = "Ya esta ocupado";
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText(contenido);
-                alert.showAndWait();
-            }
+        if (peopleComboBox.getValue() == null || tipoComboBox.getValue() == null || idTxt.getText().isEmpty() || habitacionComboBox.getValue() == null || datePicker.getValue() == null) {
+            String contenido = "Rellene todos los campos";
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText(contenido);
+            alert.showAndWait();
         } else {
-            if(App.getHotel().reservarSuite(habitacionComboBox.getValue(), datePicker.getValue(), peopleComboBox.getValue())){
-                String contenido = "Se reservó";
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText(contenido);
-                alert.showAndWait();
+
+            boolean status = false;
+            int index = 0;
+            if (idTxt.getText().length() == 3) {
+                while (!status && index < App.getHotel().getReservaciones().size()) {
+                    if (App.getHotel().getReservaciones().get(index).getId().indexOf(idTxt.getText()) >= 0) {
+                        status = true;
+                        Reservacion reservacion = new Reservacion(datePicker.getValue(), App.getHotel().getReservaciones().get(index).getId(), habitacionComboBox.getValue(), peopleComboBox.getValue());
+                        if (App.getHotel().updateReservacion(reservacion)) {
+                            String contenido = "Se Actualizó";
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText(null);
+                            alert.setContentText(contenido);
+                            alert.showAndWait();
+                        } else {
+                            String contenido = "No se pudo completar";
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText(null);
+                            alert.setContentText(contenido);
+                            alert.showAndWait();
+                        }
+                    }
+                    index++;
+                }
+                if (!status) {
+                    String contenido = "ID inexistente";
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText(null);
+                    alert.setContentText(contenido);
+                    alert.showAndWait();
+                }
             } else {
-                String contenido = "Ya esta ocupado";
+                String contenido = "Ingrese únicamente 3 dígitos";
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
                 alert.setContentText(contenido);
@@ -124,4 +127,5 @@ public class ReservarController {
         ObservableList<String> list = FXCollections.observableArrayList("Individual", "Doble",  "Suite");
         tipoComboBox.setItems(list);
     }
+
 }

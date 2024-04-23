@@ -9,5 +9,6 @@
       <Button fx:id="reservarButton" layoutX="98.0" layoutY="227.0" mnemonicParsing="false" onMouseClicked="#onClickReservarButton" text="Reservar Habitación" />
       <Button fx:id="verButton" layoutX="117.0" layoutY="315.0" mnemonicParsing="false" onMouseClicked="#onClickVerButton" text="Ver Reservaciones" />
       <Button fx:id="cancelReservationButton" layoutX="415.0" layoutY="228.0" mnemonicParsing="false" onMouseClicked="#onClickCancelButton" text="Cancelar una reservacion" />
+      <Button fx:id="updateReserrvacionBtn" layoutX="415.0" layoutY="185.0" mnemonicParsing="false" onMouseClicked="#onClickUpdateBtn" text="Actualizar Reservación" />
    </children>
 </AnchorPane>

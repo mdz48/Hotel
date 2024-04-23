@@ -40,11 +40,11 @@ public class Hotel {
 
 
 
-    public boolean reservarIndividual(int num, LocalDate fecha){
+    public boolean reservarIndividual(int num, LocalDate fecha, int personas){
         boolean flag = false;
         for (int i = 0; i < individuales.size(); i++) {
             if (num == individuales.get(i).getNumeroHabitacion() && individuales.get(i).isStatus() == true) {
-                Reservacion reservacion = new Reservacion(fecha, UUID.randomUUID().toString(), num);
+                Reservacion reservacion = new Reservacion(fecha, UUID.randomUUID().toString(), num, personas);
                 reservaciones.add(reservacion);
                 individuales.get(i).setStatus(false);
                 flag = true;
@@ -54,13 +54,13 @@ public class Hotel {
         return flag;
     }
 
-    public boolean resevarDoble(int num, LocalDate fecha){
+    public boolean resevarDoble(int num, LocalDate fecha, int personas){
         boolean flag = false;
         for (int i = 0; i < habitacionDobles.size(); i++) {
             if (num == habitacionDobles.get(i).getNumeroHabitacion() && habitacionDobles.get(i).isStatus() == true) {
                 flag = true;
                 habitacionDobles.get(i).setStatus(false);
-                Reservacion reservacion = new Reservacion(fecha, UUID.randomUUID().toString(), num);
+                Reservacion reservacion = new Reservacion(fecha, UUID.randomUUID().toString(), num, personas);
                 reservaciones.add(reservacion);
                 i = habitacionDobles.size();
             }
@@ -68,12 +68,12 @@ public class Hotel {
         return flag;
     }
 
-    public boolean reservarSuite(int num, LocalDate fecha){
+    public boolean reservarSuite(int num, LocalDate fecha, int personas){
         boolean flag = false;
         for (int i = 0; i < suites.size(); i++) {
             if (num == suites.get(i).getNumeroHabitacion() && suites.get(i).isStatus() == true) {
                 flag = true;
-                Reservacion reservacion = new Reservacion(fecha, UUID.randomUUID().toString(), num);
+                Reservacion reservacion = new Reservacion(fecha, UUID.randomUUID().toString(), num, personas);
                 reservaciones.add(reservacion);
                 suites.get(i).setStatus(false);
                 i = suites.size();
@@ -133,6 +133,18 @@ public class Hotel {
             }
         }
 
+        return flag;
+    }
+
+    public boolean updateReservacion(Reservacion reservacion){
+        boolean flag = false;
+        for (int i = 0; i < reservaciones.size(); i++) {
+            if (reservacion.getId().equals(reservaciones.get(i).getId())) {
+                flag = true;
+                reservaciones.set(i, reservacion);
+                i = reservaciones.size();
+            }
+        }
         return flag;
     }
 
